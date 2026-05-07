@@ -1,12 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const AddTasks = () => {
   const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  // Load tasks from localStorage on component mount
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // Save tasks whenever tasks change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Task added:', task);
+
+    if (!task.trim()) return;
+
+    const newTask = {
+      id: Date.now(),
+      text: task,
+      completed: false,
+    };
+
+    setTasks([...tasks, newTask]);
+
+    console.log('Task added:', newTask);
+
     setTask('');
   };
 
@@ -35,9 +62,13 @@ const AddTasks = () => {
 
         <form onSubmit={handleSubmit} className="w-full space-y-8">
           <div className="relative group text-left">
-            <label htmlFor="task-input" className="block text-[11px] font-black text-neutral-400 uppercase tracking-[0.25em] mb-3 ml-6">
+            <label
+              htmlFor="task-input"
+              className="block text-[11px] font-black text-neutral-400 uppercase tracking-[0.25em] mb-3 ml-6"
+            >
               Task Description
             </label>
+
             <input
               id="task-input"
               type="text"
@@ -49,21 +80,32 @@ const AddTasks = () => {
             />
           </div>
 
-          <button 
+          <button
             type="submit"
             className="group w-full bg-black text-white font-black py-6 rounded-4xl shadow-2xl shadow-black/40 hover:bg-neutral-800 active:scale-[0.98] transition-all duration-500 flex items-center justify-center space-x-4 text-xl tracking-wide"
           >
             <span>CREATE TASK</span>
+
             <div className="bg-white/20 p-2 rounded-full group-hover:translate-x-1 transition-transform duration-300">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </div>
           </button>
         </form>
 
-        <Link 
-          to="/dashboard" 
+        <Link
+          to="/dashboard"
           className="mt-12 text-neutral-400 hover:text-black font-bold text-sm uppercase tracking-widest transition-all duration-300 flex items-center space-x-2"
         >
           <span>←</span>
@@ -73,10 +115,10 @@ const AddTasks = () => {
 
       {/* Decorative Blur Elements */}
       <div className="fixed top-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-neutral-100 rounded-full blur-[120px] -z-10 opacity-60"></div>
+
       <div className="fixed bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-neutral-50 rounded-full blur-[120px] -z-10 opacity-60"></div>
     </div>
   );
 };
 
 export default AddTasks;
-
