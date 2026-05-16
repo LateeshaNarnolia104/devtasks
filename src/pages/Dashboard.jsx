@@ -1,8 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [dark, setDark] = useState(false);
+  const [percentage, setPercentage] = useState(0);
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    let calcPercentage = 0;
+    
+    if (savedTasks) {
+      const tasks = JSON.parse(savedTasks);
+      const totalTasks = tasks.length;
+      if (totalTasks > 0) {
+        const completedTasks = tasks.filter(task => task.completed).length;
+        calcPercentage = Math.round((completedTasks / totalTasks) * 100);
+      }
+    }
+
+    const timer = setTimeout(() => {
+      setPercentage(calcPercentage);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
  const theme = {
   light: {
@@ -59,7 +80,19 @@ const t = dark ? theme.dark : theme.light;
         <header className="shrink-0 mb-12 flex justify-between items-end">
           <div>
             <h1 className="text-4xl font-black uppercase tracking-tighter mb-2">Dashboard</h1>
-            <p className="text-gray-400 font-medium">Manage your engineering workflow</p>
+            <p className="text-gray-400 font-medium mb-6">Manage your engineering workflow</p>
+            
+            <div className="w-full max-w-sm">
+              <div className="text-xs font-black uppercase tracking-widest mb-2">
+                {percentage}% COMPLETE
+              </div>
+              <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-1000 ${dark ? 'bg-white' : 'bg-black'}`}
+                  style={{ width: `${percentage}%` }}
+                ></div>
+              </div>
+            </div>
           </div>
 
          <div className="flex items-center gap-4">
