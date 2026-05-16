@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "../components/ThemeToggle";
 
-const FILTERS = ["ALL", "ACTIVE", "COMPLETED"]; // ✅ Task 1 — filter options
+const FILTERS = ["ALL", "ACTIVE", "COMPLETED"];
 
 const ListTasks = () => {
+  const { dark } = useTheme();
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -13,12 +16,12 @@ const ListTasks = () => {
   const [filter, setFilter] = useState("ALL"); // ✅ Task 1 — filter state
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [filter, setFilter] = useState("ALL");
 
-  // ✅ Task 1 — filter logic applied before rendering
   const filteredTasks = tasks.filter((task) => {
     if (filter === "ACTIVE") return !task.completed;
     if (filter === "COMPLETED") return task.completed;
-    return true; // "ALL"
+    return true;
   });
 
   const startEditing = (task) => {
@@ -99,10 +102,18 @@ const ListTasks = () => {
         <h1 className="text-3xl font-black text-black mb-8 text-center uppercase">
           Task List
         </h1>
+    <div className={`min-h-screen p-6 font-sans antialiased transition-colors duration-300 ${dark ? "bg-zinc-950" : "bg-[#FDFDFD]"}`}>
+      <div className={`max-w-2xl mx-auto rounded-4xl shadow-lg p-8 border transition-colors duration-300 ${dark ? "bg-zinc-900 border-zinc-700" : "bg-white border-neutral-100"}`}>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className={`text-3xl font-black uppercase ${dark ? "text-white" : "text-black"}`}>
+            Task List
+          </h1>
+          <ThemeToggle />
+        </div>
 
-        {/* ✅ Task 2 — Filter Navigation */}
+        {/* Filter Navigation */}
         <div className="flex justify-center mb-6">
-          <div className="flex gap-2 p-1 border border-neutral-200 rounded-full bg-neutral-50">
+          <div className={`flex gap-2 p-1 border rounded-full ${dark ? "border-zinc-700 bg-zinc-800" : "border-neutral-200 bg-neutral-50"}`}>
             {FILTERS.map((f) => (
               <button
                 key={f}
@@ -110,6 +121,8 @@ const ListTasks = () => {
                 className={`px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-200 cursor-pointer ${
                   filter === f
                     ? "bg-black text-white"
+                    : dark
+                    ? "bg-transparent text-neutral-400 hover:text-white border border-transparent hover:border-zinc-600"
                     : "bg-transparent text-neutral-400 hover:text-black border border-transparent hover:border-neutral-300"
                 }`}
               >
@@ -119,7 +132,6 @@ const ListTasks = () => {
           </div>
         </div>
 
-        {/* ✅ Task 3 — Updated task display using filteredTasks */}
         {filteredTasks.length === 0 ? (
           <p className="text-center text-neutral-400 font-medium py-8">
             {filter === "ACTIVE"
@@ -133,7 +145,7 @@ const ListTasks = () => {
             {filteredTasks.map((task) => (
               <li
                 key={task.id}
-                className="flex items-center justify-between bg-neutral-50 rounded-2xl p-4 shadow-sm"
+                className={`flex items-center justify-between rounded-2xl p-4 shadow-sm transition-colors duration-200 ${dark ? "bg-zinc-800" : "bg-neutral-50"}`}
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   <input
@@ -166,6 +178,18 @@ const ListTasks = () => {
                     )}
 
                     <span className="text-[11px] font-black uppercase px-2 py-1 rounded-full bg-neutral-100 text-neutral-700 shrink-0">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`font-semibold text-lg ${
+                        task.completed
+                          ? "line-through text-neutral-400"
+                          : dark ? "text-white" : "text-black"
+                      }`}
+                    >
+                      {task.text}
+                    </span>
+
+                    <span className={`text-[11px] font-black uppercase px-2 py-1 rounded-full ${dark ? "bg-zinc-700 text-neutral-300" : "bg-neutral-100 text-neutral-700"}`}>
                       {task.category ?? "TASK"}
                     </span>
                   </div>
@@ -187,13 +211,20 @@ const ListTasks = () => {
                     Delete
                   </button>
                 </div>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className={`px-4 py-2 rounded-xl transition-all duration-300 font-bold text-sm ${dark ? "bg-white text-black hover:bg-gray-100" : "bg-black text-white hover:bg-neutral-800"}`}
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
         )}
+
         <Link
           to="/dashboard"
-          className="mt-12 text-neutral-400 hover:text-black font-bold text-sm uppercase tracking-widest transition-all duration-300 flex items-center space-x-2"
+          className={`mt-12 font-bold text-sm uppercase tracking-widest transition-all duration-300 flex items-center space-x-2 ${dark ? "text-neutral-400 hover:text-white" : "text-neutral-400 hover:text-black"}`}
         >
           <span>←</span>
           <span>Back to Dashboard</span>
