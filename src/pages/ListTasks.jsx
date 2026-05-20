@@ -2,25 +2,36 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useCategory } from "../context/CategoryContext";
 import ThemeToggle from "../components/ThemeToggle";
 
 const FILTERS = ["ALL", "ACTIVE", "COMPLETED"];
 
 const ListTasks = () => {
   const { dark } = useTheme();
+  const { categories } = useCategory();
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
   const [filter, setFilter] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [activeDropdownId, setActiveDropdownId] = useState(null);
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "ACTIVE") return !task.completed;
-    if (filter === "COMPLETED") return task.completed;
-    return true;
+    const matchesFilter =
+      filter === "ACTIVE"
+        ? !task.completed
+        : filter === "COMPLETED"
+        ? task.completed
+        : true;
+    const matchesSearch = task.text
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
   });
 
   const startEditing = (task) => {
@@ -52,24 +63,17 @@ const ListTasks = () => {
 
   const deleteTask = (id) => {
     let deletedTasks = localStorage.getItem("deleted_tasks");
-
     if (deletedTasks == null) deletedTasks = [];
     else deletedTasks = JSON.parse(deletedTasks);
-
     const deletedTask = tasks.filter((task) => task.id === id)[0];
-
     const taskWithTimestamp = {
       ...deletedTask,
       deletedAt: new Date().toISOString(),
     };
-
     deletedTasks.push(taskWithTimestamp);
-
     localStorage.setItem("deleted_tasks", JSON.stringify(deletedTasks));
-
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
-
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     toast.warning("Task permanently removed.", {
       style: { background: "#000000", color: "#ffffff" },
@@ -78,11 +82,10 @@ const ListTasks = () => {
 
   const toggleComplete = (id) => {
     const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, completed: !task.completed } : task,
+      task.id === id ? { ...task, completed: !task.completed } : task
     );
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-
     const task = tasks.find((task) => task.id === id);
     if (task.completed) {
       toast.info("Task re-opened.", {
@@ -95,6 +98,18 @@ const ListTasks = () => {
     }
   };
 
+  const updateCategory = (taskId, newCategory) => {
+    const updatedTasks = tasks.map((t) =>
+      t.id === taskId ? { ...t, category: newCategory } : t
+    );
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setActiveDropdownId(null);
+    toast.success("Category updated successfully.", {
+      style: { background: "#000000", color: "#ffffff" },
+    });
+  };
+
   return (
     <div className={`min-h-screen p-6 font-sans antialiased transition-colors duration-300 ${dark ? "bg-zinc-950" : "bg-[#FDFDFD]"}`}>
       <div className={`max-w-2xl mx-auto rounded-4xl shadow-lg p-8 border transition-colors duration-300 ${dark ? "bg-zinc-900 border-zinc-700" : "bg-white border-neutral-100"}`}>
@@ -104,6 +119,19 @@ const ListTasks = () => {
           </h1>
           <ThemeToggle />
         </div>
+
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="SEARCH TASKS..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={`w-full mb-4 px-4 py-3 rounded-2xl border-2 outline-none font-black uppercase tracking-widest text-sm transition-all duration-200 ${
+            dark
+              ? "bg-zinc-800 text-white border-zinc-700 focus:border-white placeholder-zinc-500"
+              : "bg-neutral-50 text-black border-neutral-200 focus:border-black placeholder-neutral-400"
+          }`}
+        />
 
         {/* Filter Navigation */}
         <div className="flex justify-center mb-6">
@@ -128,7 +156,9 @@ const ListTasks = () => {
 
         {filteredTasks.length === 0 ? (
           <p className="text-center text-neutral-400 font-medium py-8">
-            {filter === "ACTIVE"
+            {searchQuery
+              ? "No tasks match your search."
+              : filter === "ACTIVE"
               ? "No active tasks. You're all caught up!"
               : filter === "COMPLETED"
               ? "No completed tasks yet."
@@ -170,9 +200,44 @@ const ListTasks = () => {
                         >
                           {task.text}
                         </span>
-                        <span className={`text-[11px] font-black uppercase px-2 py-1 rounded-full ${dark ? "bg-zinc-700 text-neutral-300" : "bg-neutral-100 text-neutral-700"}`}>
-                          {task.category ?? "TASK"}
-                        </span>
+
+                        {/* Category Badge with Dropdown */}
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActiveDropdownId(
+                                activeDropdownId === task.id ? null : task.id
+                              )
+                            }
+                            className={`text-[11px] font-black uppercase px-2 py-1 rounded-full cursor-pointer transition-all duration-200 ${
+                              dark
+                                ? "bg-zinc-700 text-neutral-300 hover:bg-zinc-600"
+                                : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                            }`}
+                          >
+                            {task.category ?? "TASK"}
+                          </button>
+
+                          {activeDropdownId === task.id && (
+                            <div className={`absolute top-7 left-0 z-10 rounded-xl shadow-lg border p-2 flex flex-col gap-1 min-w-[120px] ${dark ? "bg-zinc-800 border-zinc-700" : "bg-white border-neutral-200"}`}>
+                              {categories.map((cat) => (
+                                <button
+                                  key={cat}
+                                  type="button"
+                                  onClick={() => updateCategory(task.id, cat)}
+                                  className={`text-[11px] font-black uppercase px-2 py-1 rounded-lg text-left transition-all duration-200 ${
+                                    task.category === cat
+                                      ? dark ? "bg-white text-black" : "bg-black text-white"
+                                      : dark ? "text-neutral-300 hover:bg-zinc-700" : "text-neutral-700 hover:bg-neutral-100"
+                                  }`}
+                                >
+                                  {cat}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
