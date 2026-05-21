@@ -15,8 +15,8 @@ const ListTasks = () => {
     return savedTasks ? JSON.parse(savedTasks) : []
   })
 
-  const [filter, setFilter] = useState('ALL')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [filter, setFilter] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [editingId, setEditingId] = useState(null)
   const [editingText, setEditingText] = useState('')
@@ -33,6 +33,12 @@ const ListTasks = () => {
   const activeTasks = tasks.filter((task) => !task.completed).length
 
   const completedTasks = tasks.filter((task) => task.completed).length
+  const taskCounts = {
+    ALL: tasks.length,
+    ACTIVE: tasks.filter((task) => !task.completed).length,
+    COMPLETED: tasks.filter((task) => task.completed).length,
+  };
+
   const startEditing = (task) => {
     setEditingId(task.id)
     setEditingText(task.text)
@@ -104,6 +110,36 @@ const ListTasks = () => {
       },
     })
   }
+
+  const clearCompletedTasks = () => {
+    const completedTasks = tasks.filter((task) => task.completed);
+    if (completedTasks.length === 0) return;
+
+    const savedDeletedTasks = localStorage.getItem("deleted_tasks");
+    const deletedTasks = savedDeletedTasks ? JSON.parse(savedDeletedTasks) : [];
+    const deletedAt = new Date().toISOString();
+    const completedWithTimestamps = completedTasks.map((task) => ({
+      ...task,
+      deletedAt,
+    }));
+    const updatedTasks = tasks.filter((task) => !task.completed);
+
+    localStorage.setItem(
+      "deleted_tasks",
+      JSON.stringify([...deletedTasks, ...completedWithTimestamps])
+    );
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setTasks(updatedTasks);
+
+    toast.success(
+      `${completedTasks.length} completed ${
+        completedTasks.length === 1 ? "task" : "tasks"
+      } moved to delete history.`,
+      {
+        style: { background: "#000000", color: "#ffffff" },
+      }
+    );
+  };
 
   const toggleComplete = (id) => {
     const updatedTasks = tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task))
@@ -187,16 +223,32 @@ const ListTasks = () => {
           </div>
         </div>
 
-        {filteredTasks.length === 0 ? (
-          <p className="text-center text-neutral-400 font-medium py-8">
-            {searchQuery
-              ? 'No tasks match your search.'
-              : filter === 'ACTIVE'
-                ? "No active tasks. You're all caught up!"
-                : filter === 'COMPLETED'
-                  ? 'No completed tasks yet.'
-                  : 'No tasks added yet.'}
-          </p>
+        {taskCounts.COMPLETED > 0 && (
+          <div className="flex justify-end mb-6">
+            <button
+              type="button"
+              onClick={clearCompletedTasks}
+              className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-200 cursor-pointer ${
+                dark
+                  ? "border-zinc-600 text-neutral-300 hover:border-white hover:text-white"
+                  : "border-neutral-300 text-neutral-600 hover:border-black hover:text-black"
+              }`}
+            >
+              Clear Completed
+            </button>
+          </div>
+        )}
+
+    {filteredTasks.length === 0 ? (
+  <p className="text-center text-neutral-400 font-medium py-8">
+    {searchQuery
+      ? "No tasks match your search."
+      : filter === "ACTIVE"
+      ? "No active tasks. You're all caught up!"
+      : filter === "COMPLETED"
+      ? "No completed tasks yet."
+      : "No tasks added yet."}
+  </p>
         ) : (
           <ul className="space-y-4">
             {filteredTasks.map((task) => (
@@ -317,4 +369,4 @@ const ListTasks = () => {
   )
 }
 
-export default ListTasks
+export default ListTasks;
