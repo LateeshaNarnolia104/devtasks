@@ -114,10 +114,6 @@ const DeleteHistory = () => {
         const data = JSON.parse(text);
         if (Array.isArray(data)) {
           const tasks = data.filter(
-            (item) => item.text && item.id && !item.deletedAt,
-          );
-          const deleted = data.filter(
-            (item) => item.text && item.id && item.deletedAt,
             (item) => item.text && item.id && !item.deletedAt
           );
           const deleted = data.filter(
@@ -127,22 +123,6 @@ const DeleteHistory = () => {
           const existingDeleted =
             JSON.parse(localStorage.getItem("deleted_tasks")) || [];
 
-          localStorage.setItem(
-            "tasks",
-            JSON.stringify([...existingTasks, ...tasks]),
-          );
-          localStorage.setItem(
-            "deleted_tasks",
-            JSON.stringify([...existingDeleted, ...deleted]),
-          );
-          setDeletedTasks([...existingDeleted, ...deleted]);
-          toast.success("Data imported successfully");
-        } else {
-          toast.error("Invalid file structure");
-        }
-      } catch (e) {
-        console.error(e);
-        toast.error("Invalid file format");
           // Register custom categories
           const savedCategories = localStorage.getItem("available_categories");
           const currentCategories = savedCategories ? JSON.parse(savedCategories) : ["FEATURE", "BUG", "REFACTOR"];
@@ -178,9 +158,6 @@ const DeleteHistory = () => {
   };
 
   return (
-    /* CORRECTION 1 : min-h-screen, overflow adaptif et réduction du padding global sur mobile */
-    <div
-      className={`min-h-screen md:h-screen w-full font-sans overflow-y-auto md:overflow-hidden flex flex-col p-4 md:p-8 transition-colors duration-300 ${dark ? "bg-black text-white" : "bg-white text-black"}`}
     <div
       className={`min-h-screen md:h-screen w-full font-sans overflow-y-auto md:overflow-hidden flex flex-col p-4 md:p-8 transition-colors duration-300 ${
         dark ? "bg-black text-white" : "bg-white text-black"
@@ -228,7 +205,6 @@ const DeleteHistory = () => {
             <div className="max-h-72 overflow-y-auto space-y-3 w-full pr-2">
               {deletedTasks.length === 0 ? (
                 <div
-                  className={`text-center font-medium py-10 border border-dashed rounded-2xl ${dark ? "text-gray-500 border-gray-700" : "text-gray-400 border-gray-200"}`}
                   className={`text-center font-medium py-10 border border-dashed rounded-2xl ${
                     dark ? "text-gray-500 border-gray-700" : "text-gray-400 border-gray-200"
                   }`}

@@ -21,8 +21,6 @@ const AddTasks = () => {
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
