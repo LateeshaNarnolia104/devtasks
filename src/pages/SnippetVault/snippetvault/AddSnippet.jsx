@@ -1,17 +1,57 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useTheme } from "../../../context/ThemeContext";
 import ThemeToggle from "../../../components/ThemeToggle";
 
 const AddSnippet = () => {
   const { dark } = useTheme();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [category, setCategory] = useState("GIT");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Only design, no functions requested
+
+    // 1. Form Validation
+    const trimmedTitle = title.trim();
+    const trimmedCode = code.trim();
+
+    if (!trimmedTitle) {
+      toast.error("Please fill in all snippet details.");
+      return;
+    }
+    if (!trimmedCode) {
+      toast.error("Please fill in all snippet details.");
+      return;
+    }
+
+    // 2. Build snippet object
+    const newSnippet = {
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2),
+      title: trimmedTitle,
+      code: trimmedCode,
+      category,
+      createdAt: new Date().toISOString()
+    };
+
+    // 3. LocalStorage Persistence
+    const raw = localStorage.getItem("dev_snippets");
+    const existing = raw ? JSON.parse(raw) : [];
+    existing.push(newSnippet);
+    localStorage.setItem("dev_snippets", JSON.stringify(existing));
+
+    // 4. Toast Notification (Success)
+    toast.success("Snippet successfully secured in vault!");
+
+    // 5. Reset Form
+    setTitle("");
+    setCode("");
+    setCategory("GIT");
+
+    // 6. Redirect
+    navigate("/snippetvault/list");
   };
 
   // Category Icons & Badges mapping for rich aesthetics
@@ -319,4 +359,3 @@ const AddSnippet = () => {
 };
 
 export default AddSnippet;
-
