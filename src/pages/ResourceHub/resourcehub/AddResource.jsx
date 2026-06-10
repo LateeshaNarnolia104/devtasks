@@ -87,6 +87,9 @@ const AddResource = () => {
         dark ? "bg-zinc-950" : "bg-[#F7F7F7]"
       }`}
     >
+      <title>Add Resource | DevTasks</title>
+      <meta name="description" content="Create and manage development resources." />
+      
       <div
         className={`absolute top-[-10%] right-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full blur-[100px] opacity-30 transition-colors duration-500 ${
           dark ? "bg-zinc-800" : "bg-neutral-200"
