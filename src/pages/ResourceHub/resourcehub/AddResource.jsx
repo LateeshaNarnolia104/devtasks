@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "../../../context/ThemeContext";
 import ThemeToggle from "../../../components/ThemeToggle";
 import { toast } from "sonner";
@@ -9,34 +9,78 @@ const categories = ["GENERAL", "LOCALHOST", "STAGING", "FIGMA", "DOCUMENTATION"]
 const AddResource = () => {
   const navigate = useNavigate();
   const { dark } = useTheme();
-  const [resourceName, setResourceName] = useState("");
-  const [resourceUrl, setResourceUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("GENERAL");
-
+  const [resource, setResource] = useState({
+    id: null,
+    title: "",
+    url: "",
+    description: "",
+    category: "GENERAL",
+    createdAt: null
+  });
   const [resources, setResources] = useState(() => {
     const existingResources = localStorage.getItem("dev_resources");
     return existingResources ? JSON.parse(existingResources) : [];
   });
+  const { id } = useParams();
+  const isEdit = Boolean(id);
 
   useEffect(() => {
     localStorage.setItem("dev_resources", JSON.stringify(resources));
   }, [resources]);
 
+  useEffect(() => {
+    if (isEdit) {
+      if (resources.length === 0) {
+        toast.error("Resource not found.");
+        navigate("/resourcehub/add");
+        return;
+      }
+      const getResourceById = (id) => {
+        const existingResource = resources.find((item) => item.id === id);
+        if (!existingResource) {
+          toast.error("Resource not found.");
+          navigate("/resourcehub/add");
+          return;
+        }
+        setResource(existingResource);
+      };
+
+      getResourceById(id);
+      document.title = "Edit Resource | DevTasks"
+    } 
+  }, [id, isEdit, resources, navigate]);
+
+  const addResource = (newResource) => {
+    setResources([
+      ...resources,
+      {
+        id: crypto.randomUUID(),
+        ...newResource,
+        createdAt: new Date().toISOString(),
+      }
+    ]);
+  };
+
+  const updateResource = (resource) => {
+    setResources(resources.map((existingResource) => (
+      existingResource.id === resource.id ? {...resource} : existingResource
+    )));
+  };
+
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(event);
     const validationErrors = [];
-    const trimedResourceName = resourceName.trim();
-    const trimedResourceUrl = resourceUrl.trim();
+    const trimedResourceTitle = resource.title.trim();
+    const trimedResourceUrl = resource.url.trim();
 
-    if (!trimedResourceName) {
+    if (!trimedResourceTitle) {
       validationErrors.push("・Resource name");
     }
     if (!trimedResourceUrl) {
       validationErrors.push("・Resource url");
     }
-    if (!category) {
+    if (!resource.category) {
       validationErrors.push("・Category tag");
     }
 
@@ -45,8 +89,8 @@ const AddResource = () => {
         { 
           description: (
             <div>
-              {validationErrors.map((message) => (
-                <div>{message}</div>
+              {validationErrors.map((message, index) => (
+                <div key={index}>{message}</div>
               ))}
             </div>
           )
@@ -55,18 +99,24 @@ const AddResource = () => {
       return;
     }
 
-    const newResource = {
-      id: crypto.randomUUID(),
-      title: trimedResourceName,
+    const resourceValue = {
+      title: trimedResourceTitle,
       url: trimedResourceUrl,
-      category,
-      description,
-      createdAt: new Date().toISOString()
+      category: resource.category,
+      description: resource.description
+    };
+
+    if (isEdit) {
+      updateResource({
+        id: resource.id,
+        ...resourceValue,
+        createdAt: resource.createdAt
+      });
+    } else {
+      addResource(resourceValue);
     }
 
-    setResources([...resources, newResource]); 
-
-    toast.success("Resource successfully added.",
+    toast.success(isEdit ? "Resource successfully updated." : "Resource successfully added.",
       {
         action: {
           label: "view list",
@@ -75,10 +125,14 @@ const AddResource = () => {
       }
     );
 
-    setResourceName("");
-    setResourceUrl("");
-    setCategory("GENERAL");
-    setDescription("");
+    setResource({
+      id: null,
+      title: "",
+      url: "",
+      description: "",
+      category: "GENERAL",
+      createdAt: null
+    });
   };
 
   return (
@@ -119,7 +173,7 @@ const AddResource = () => {
                 dark ? "text-white" : "text-black"
               }`}
             >
-              Add New Resource
+              {isEdit ? "Edit Resource" : "Add New Resource"}
             </h1>
             <p className="text-xs sm:text-sm text-neutral-400 mt-1">
               Save project links, docs, designs, and staging references
@@ -128,8 +182,8 @@ const AddResource = () => {
           <ThemeToggle />
         </div>
 
-        <div className="p-6 sm:p-10 flex flex-col md:flex-row gap-4p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10">
-          <form className="space-y-6 flex flex-col justify-between lg:col-span-7">
+        <div className="p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10">
+          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col justify-between lg:col-span-7">
             <div className="space-y-5">
               <div className="group flex flex-col space-y-2">
                 <label
@@ -143,8 +197,8 @@ const AddResource = () => {
                 </label>
                 <input
                   type="text"
-                  value={resourceName}
-                  onChange={(e) => setResourceName(e.target.value)}
+                  value={resource.title}
+                  onChange={(e) => setResource({...resource, title: e.target.value})}
                   placeholder="e.g. Product Design System"
                   className={`w-full px-4 py-3 rounded-2xl border text-sm font-semibold outline-none transition-all duration-300 ${
                     dark
@@ -166,8 +220,8 @@ const AddResource = () => {
                 </label>
                 <input
                   type="url"
-                  value={resourceUrl}
-                  onChange={(e) => setResourceUrl(e.target.value)}
+                  value={resource.url}
+                  onChange={(e) => setResource({...resource, url: e.target.value})}
                   placeholder="https://example.com/resource"
                   className={`w-full px-4 py-3 rounded-2xl border text-sm font-semibold outline-none transition-all duration-300 ${
                     dark
@@ -192,9 +246,9 @@ const AddResource = () => {
                     <button
                       key={item}
                       type="button"
-                      onClick={() => setCategory(item)}
+                      onClick={() => setResource({...resource, category: item})}
                       className={`px-2 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest border transition-all duration-300 ${
-                        category === item
+                        resource.category === item
                           ? dark
                             ? "bg-white text-black border-white"
                             : "bg-black text-white border-black"
@@ -220,8 +274,8 @@ const AddResource = () => {
                   Description
                 </label>
                 <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={resource.description}
+                  onChange={(e) => setResource({...resource, description: e.target.value})}
                   placeholder="Add a short note about when to use this resource."
                   rows={5}
                   className={`w-full px-4 py-3 rounded-2xl border text-sm outline-none transition-all duration-300 resize-none ${
@@ -246,14 +300,13 @@ const AddResource = () => {
               </Link>
               <button
                 type="submit"
-                onClick={handleSubmit}
                 className={`w-full py-4 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all duration-300 transform active:scale-95 ${
                   dark
                     ? "bg-white border-white text-black hover:bg-neutral-200"
                     : "bg-black border-black text-white hover:bg-neutral-800"
                 }`}
               >
-                Submit Resource
+                {isEdit ? "Update Resource" : "Submit Resource"}
               </button>
             </div>
           </form>
@@ -284,7 +337,7 @@ const AddResource = () => {
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${dark ? "bg-white text-black" : "bg-black text-white"}
                         `}
                     >
-                      <span>{category}</span>
+                      <span>{resource.category}</span>
                     </div>
 
                     <div className="flex items-center gap-1.5">
@@ -296,14 +349,14 @@ const AddResource = () => {
                   {/* Title Preview */}
                   <h3
                     className={`text-lg font-black uppercase tracking-tight transition-colors duration-300 break-words ${
-                      resourceName.trim()
+                      resource.title.trim()
                         ? dark
                           ? "text-white"
                           : "text-black"
                         : "text-neutral-400 italic"
                     }`}
                   >
-                    {resourceName.trim() ? resourceName : "Unnamed Resource"}
+                    {resource.title.trim() ? resource.title : "Unnamed Resource"}
                   </h3>
 
                   {/* Resource url preview */}
@@ -324,8 +377,8 @@ const AddResource = () => {
                           : "bg-white border-neutral-200 text-neutral-600"
                       }`}
                     >
-                      {resourceUrl.trim() ? (
-                        <pre className="whitespace-pre-wrap break-all font-semibold">{resourceUrl}</pre>
+                      {resource.url.trim() ? (
+                        <pre className="whitespace-pre-wrap break-all font-semibold">{resource.url}</pre>
                     ) : (
                       <span className="text-neutral-400 italic font-sans">
                         // resource url preview will appear here...
@@ -352,8 +405,8 @@ const AddResource = () => {
                           : "bg-white border-neutral-200 text-neutral-600"
                       }`}
                     >
-                      {description.trim() ? (
-                        <pre className="whitespace-pre-wrap break-all font-semibold">{description}</pre>
+                      {resource.description.trim() ? (
+                        <pre className="whitespace-pre-wrap break-all font-semibold">{resource.description}</pre>
                     ) : (
                       <span className="text-neutral-400 italic font-sans">
                         // description preview will appear here...
