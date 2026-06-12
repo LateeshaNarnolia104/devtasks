@@ -244,7 +244,7 @@ const RegexTester = () => {
                               : "bg-black text-white border-black"
                             : dark
                             ? "border-zinc-700 text-zinc-300 hover:border-white hover:text-white"
-                            : "border-neutral-200 text-zinc-600 hover:text-black hover:text-black"
+                            : "border-neutral-200 text-zinc-600 hover:text-black"
                         }`}
                       >
                         {flag.label}
