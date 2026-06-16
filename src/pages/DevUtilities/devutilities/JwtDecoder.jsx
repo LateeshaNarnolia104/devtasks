@@ -55,9 +55,19 @@ const JwtDecoder = () => {
     setError("");
   };
   const handleSample = () => {
-  setInput(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyb2xlIjoiRGV2ZWxvcGVyIn0.signature"
-  );
+  const sampleToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyb2xlIjoiRGV2ZWxvcGVyIn0.c2lnbmF0dXJl";
+
+  setInput(sampleToken);
+
+  try {
+    const result = decodeJwt(sampleToken);
+    setDecoded(result);
+    setError("");
+  } catch (err) {
+    setDecoded(null);
+    setError(err.message);
+  }
 };
   const handleCopy = async (data, label) => {
     try {
