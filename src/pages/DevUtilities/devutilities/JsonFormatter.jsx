@@ -32,7 +32,15 @@ const JsonFormatter = () => {
     setInput("");
     setOutput("");
   };
-
+  const handleSample = () => {
+  setInput(`{
+  "name": "John Doe",
+  "role": "Developer",
+  "active": true,
+  "skills": ["React", "JavaScript"]
+}`);
+  setOutput("");
+};
   const handleCopy = async () => {
     try {
       if (!output) return;
@@ -46,6 +54,7 @@ const JsonFormatter = () => {
   const buttons = [
     { label: "Format", onClick: handleFormat },
     { label: "Minify", onClick: handleMinify },
+    { label: "Sample", onClick: handleSample },
     { label: "Clear", onClick: handleClear },
   ];
   return (
@@ -125,7 +134,7 @@ const JsonFormatter = () => {
                     : "bg-neutral-50 border-neutral-300 text-black placeholder-neutral-400 focus:border-black focus:ring-1 focus:ring-black"
                 }`}
               />
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {buttons.map((btn) => (
                   <button
                     key={btn.label}

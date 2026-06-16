@@ -104,7 +104,15 @@ const RegexTester = () => {
     setTestText("");
     setFlags({ g: true, i: false, m: false });
   }, []);
-
+  const handleSample = useCallback(() => {
+  setPattern("\\d+");
+  setTestText("Order 123 contains 456 items and 789 products.");
+  setFlags({
+    g: true,
+    i: false,
+    m: false,
+  });
+}, []);
   const handleCopyPattern = useCallback(() => {
     if (!pattern) {
       toast.error("No pattern to copy.");
@@ -292,6 +300,17 @@ const RegexTester = () => {
                   }`}
                 >
                   Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSample}
+                  className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                   dark
+                    ? "bg-zinc-800 border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500"
+                   : "bg-white border-neutral-200 text-zinc-600 hover:text-black hover:border-neutral-400"
+                 }`}
+                >
+                 Sample
                 </button>
                 <button
                   type="button"

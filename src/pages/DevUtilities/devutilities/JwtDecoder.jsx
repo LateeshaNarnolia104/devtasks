@@ -54,7 +54,11 @@ const JwtDecoder = () => {
     setDecoded(null);
     setError("");
   };
-
+  const handleSample = () => {
+  setInput(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyb2xlIjoiRGV2ZWxvcGVyIn0.signature"
+  );
+};
   const handleCopy = async (data, label) => {
     try {
       await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
@@ -178,7 +182,7 @@ const JwtDecoder = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <button
                   onClick={handleDecode}
                   type="button"
@@ -190,6 +194,17 @@ const JwtDecoder = () => {
                 >
                   Decode
                 </button>
+                <button
+  onClick={handleSample}
+  type="button"
+  className={`w-full px-4 py-3 rounded-xl border font-bold text-sm text-center transition-all duration-300 active:scale-95 ${
+    dark
+      ? "border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      : "border-neutral-300 text-neutral-600 hover:bg-neutral-100 hover:text-black"
+  }`}
+>
+  Sample
+</button>
                 <button
                   onClick={handleClear}
                   type="button"

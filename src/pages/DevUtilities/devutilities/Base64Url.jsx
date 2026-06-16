@@ -68,7 +68,14 @@ const Base64Url = () => {
     setInput("");
     setOutput("");
   };
-
+  const handleSample = () => {
+   if (mode === "base64") {
+    setInput("SGVsbG8gRGV2VGFza3Mh");
+   } else {
+     setInput("Hello%20DevTasks%21");
+   }
+   setOutput("");
+  };
   const handleCopy = async () => {
     if (!output) return;
     try {
@@ -82,6 +89,7 @@ const Base64Url = () => {
   const actionButtons = [
     { label: "Encode", onClick: handleEncode },
     { label: "Decode", onClick: handleDecode },
+    { label: "Sample", onClick: handleSample },
     { label: "Clear", onClick: handleClear },
     { label: "Copy", onClick: handleCopy },
   ];

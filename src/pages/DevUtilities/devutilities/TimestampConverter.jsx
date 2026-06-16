@@ -30,7 +30,9 @@ const TimestampConverter = () => {
     }
     setConvertedTimestamp(Math.floor(date.getTime() / 1000));
   };
-
+  const handleSampleTimestamp = () => {
+  setTimestamp("1704067200");
+};
   const currentUnix = Math.floor(Date.now() / 1000);
 
   const theme = {
@@ -128,12 +130,20 @@ const TimestampConverter = () => {
                 onChange={(e) => setTimestamp(e.target.value)}
                 className={`w-full px-4 py-3 rounded-xl border text-sm ${t.input}`}
               />
+              <div className="flex gap-3">
               <button
                 onClick={handleTimestampConvert}
                 className={`px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer ${t.button}`}
               >
                 Convert to Date
               </button>
+               <button
+                 onClick={handleSampleTimestamp}
+                 className={`px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer ${t.button}`}
+               >
+                 Sample
+                </button>
+              </div>
               {convertedDate && (
                 <div
                   className={`px-4 py-3 rounded-xl border text-sm font-mono break-all ${t.result}`}
