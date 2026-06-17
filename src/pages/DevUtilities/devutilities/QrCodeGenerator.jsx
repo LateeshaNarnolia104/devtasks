@@ -21,6 +21,45 @@ function normalizeHex(value, fallback) {
   return `#${hex}`;
 }
 
+function ColorSwatchPicker({ value, onChange, label, dark }) {
+  return (
+    <label
+      className={`group relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-2xl border p-1 transition-all duration-300 hover:scale-105 active:scale-95 ${
+        dark
+          ? "border-zinc-700 hover:border-zinc-500 group-focus-within:border-white group-focus-within:ring-1 group-focus-within:ring-white"
+          : "border-neutral-300 hover:border-neutral-400 group-focus-within:border-black group-focus-within:ring-1 group-focus-within:ring-black"
+      }`}
+    >
+      <span className="relative block h-full w-full overflow-hidden rounded-xl shadow-inner">
+        <span
+          className={`absolute inset-0 ${
+            dark ? "opacity-20" : "opacity-50"
+          }`}
+          style={{
+            backgroundImage:
+              "linear-gradient(45deg, #d4d4d4 25%, transparent 25%), linear-gradient(-45deg, #d4d4d4 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #d4d4d4 75%), linear-gradient(-45deg, transparent 75%, #d4d4d4 75%)",
+            backgroundSize: "8px 8px",
+            backgroundPosition: "0 0, 0 4px, 4px -4px, -4px 0",
+          }}
+          aria-hidden="true"
+        />
+        <span
+          className="absolute inset-0"
+          style={{ backgroundColor: value }}
+          aria-hidden="true"
+        />
+      </span>
+      <input
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+        aria-label={label}
+      />
+    </label>
+  );
+}
+
 const QrCodeGenerator = () => {
   const { dark } = useTheme();
   const canvasRef = useRef(null);
@@ -195,7 +234,7 @@ const QrCodeGenerator = () => {
 
         <div className="w-full p-5 sm:p-8 overflow-y-auto">
           <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8">
-            <div className="w-full lg:w-1/2 flex flex-col space-y-4">
+            <div className="w-full lg:w-1/2 min-w-0 flex flex-col space-y-4">
               <div className="flex flex-col space-y-2">
                 <div className="flex justify-between items-center">
                   <label
@@ -282,8 +321,8 @@ const QrCodeGenerator = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                <div className="flex flex-col space-y-2 min-w-0">
                   <label
                     className={`text-xs font-black uppercase tracking-widest ${
                       dark ? "text-zinc-400" : "text-neutral-500"
@@ -291,20 +330,19 @@ const QrCodeGenerator = () => {
                   >
                     Foreground
                   </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="color"
+                  <div className="flex items-center gap-3 min-w-0">
+                    <ColorSwatchPicker
                       value={foreground}
-                      onChange={(e) => handleColorPicker("fg", e.target.value)}
-                      className="w-10 h-10 rounded-xl border cursor-pointer shrink-0"
-                      aria-label="Foreground color picker"
+                      onChange={(value) => handleColorPicker("fg", value)}
+                      label="Foreground color picker"
+                      dark={dark}
                     />
                     <input
                       type="text"
                       value={fgInput}
                       onChange={(e) => handleColorChange("fg", e.target.value)}
                       placeholder="#000000"
-                      className={`flex-1 px-4 py-3 rounded-2xl border text-sm font-mono outline-none transition-all duration-300 ${
+                      className={`flex-1 min-w-0 px-4 py-3 rounded-2xl border text-sm font-mono outline-none transition-all duration-300 ${
                         dark
                           ? "bg-zinc-950 border-zinc-800 text-white placeholder-zinc-700 focus:border-white focus:ring-1 focus:ring-white"
                           : "bg-neutral-50 border-neutral-300 text-black placeholder-neutral-400 focus:border-black focus:ring-1 focus:ring-black"
@@ -313,7 +351,7 @@ const QrCodeGenerator = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-2 min-w-0">
                   <label
                     className={`text-xs font-black uppercase tracking-widest ${
                       dark ? "text-zinc-400" : "text-neutral-500"
@@ -321,20 +359,19 @@ const QrCodeGenerator = () => {
                   >
                     Background
                   </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="color"
+                  <div className="flex items-center gap-3 min-w-0">
+                    <ColorSwatchPicker
                       value={background}
-                      onChange={(e) => handleColorPicker("bg", e.target.value)}
-                      className="w-10 h-10 rounded-xl border cursor-pointer shrink-0"
-                      aria-label="Background color picker"
+                      onChange={(value) => handleColorPicker("bg", value)}
+                      label="Background color picker"
+                      dark={dark}
                     />
                     <input
                       type="text"
                       value={bgInput}
                       onChange={(e) => handleColorChange("bg", e.target.value)}
                       placeholder="#ffffff"
-                      className={`flex-1 px-4 py-3 rounded-2xl border text-sm font-mono outline-none transition-all duration-300 ${
+                      className={`flex-1 min-w-0 px-4 py-3 rounded-2xl border text-sm font-mono outline-none transition-all duration-300 ${
                         dark
                           ? "bg-zinc-950 border-zinc-800 text-white placeholder-zinc-700 focus:border-white focus:ring-1 focus:ring-white"
                           : "bg-neutral-50 border-neutral-300 text-black placeholder-neutral-400 focus:border-black focus:ring-1 focus:ring-black"
