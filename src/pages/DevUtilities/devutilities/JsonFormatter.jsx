@@ -32,20 +32,18 @@ const JsonFormatter = () => {
     setInput("");
     setOutput("");
   };
-
-  const handleSample = () => {
-    const sampleJson = {
-      name: "John Doe",
-      role: "Frontend Developer",
-      skills: ["React", "Next.js", "TypeScript"],
-      experience: 3,
-      active: true,
-    };
-
-    setInput(JSON.stringify(sampleJson));
-    setOutput("");
+const handleSample = () => {
+  const sampleJson = {
+    name: "John Doe",
+    role: "Frontend Developer",
+    skills: ["React", "Next.js", "TypeScript"],
+    experience: 3,
+    active: true,
   };
 
+  setInput(JSON.stringify(sampleJson));
+  setOutput("");
+};
   const handleCopy = async () => {
     try {
       if (!output) return;
@@ -59,6 +57,7 @@ const JsonFormatter = () => {
   const buttons = [
     { label: "Format", onClick: handleFormat },
     { label: "Minify", onClick: handleMinify },
+    { label: "Sample", onClick: handleSample },
     { label: "Clear", onClick: handleClear },
   ];
   return (
@@ -133,11 +132,11 @@ const JsonFormatter = () => {
                 <button
                   type="button"
                   onClick={handleSample}
-                  className={`text-xs font-medium transition-colors duration-300 ${
-                    dark
-                      ? "text-blue-500 hover:text-blue-400"
-                      : "text-blue-600 hover:text-blue-700"
-                  }`}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-300 ${
+                     dark
+                      ? "bg-white text-black border-white hover:bg-zinc-200"
+                      : "bg-black text-white border-black hover:bg-zinc-800"
+                   }`}
                 >
                   Sample
                 </button>
@@ -152,7 +151,7 @@ const JsonFormatter = () => {
                     : "bg-neutral-50 border-neutral-300 text-black placeholder-neutral-400 focus:border-black focus:ring-1 focus:ring-black"
                 }`}
               />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {buttons.map((btn) => (
                   <button
                     key={btn.label}

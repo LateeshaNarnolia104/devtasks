@@ -133,10 +133,10 @@ const TimestampConverter = () => {
               <button
                 type="button"
                 onClick={handleTimestampSample}
-                className={`text-xs font-medium hover:underline transition-colors duration-300 ${
-                  dark
-                    ? "text-blue-500 hover:text-blue-400"
-                    : "text-blue-600 hover:text-blue-700"
+                className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                   dark
+                     ? "bg-white text-black border-white hover:bg-zinc-200"
+                     : "bg-black text-white border-black hover:bg-zinc-800"
                 }`}
               >
                 Sample
@@ -150,12 +150,14 @@ const TimestampConverter = () => {
                 onChange={(e) => setTimestamp(e.target.value)}
                 className={`w-full px-4 py-3 rounded-xl border text-sm ${t.input}`}
               />
+              <div className="flex gap-3">
               <button
                 onClick={handleTimestampConvert}
                 className={`px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer ${t.button}`}
               >
                 Convert to Date
               </button>
+              </div>
               {convertedDate && (
                 <div
                   className={`px-4 py-3 rounded-xl border text-sm font-mono break-all ${t.result}`}
@@ -178,10 +180,10 @@ const TimestampConverter = () => {
               <button
                 type="button"
                 onClick={handleDateSample}
-                className={`text-xs font-medium hover:underline transition-colors duration-300 ${
+                className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
                   dark
-                    ? "text-blue-500 hover:text-blue-400"
-                    : "text-blue-600 hover:text-blue-700"
+                   ? "bg-white text-black border-white hover:bg-zinc-200"
+                   : "bg-black text-white border-black hover:bg-zinc-800"
                 }`}
               >
                 Sample

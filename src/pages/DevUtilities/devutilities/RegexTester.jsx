@@ -116,21 +116,19 @@ const RegexTester = () => {
     setTestText("");
     setFlags({ g: true, i: false, m: false });
   }, []);
-
-  const handleSample = useCallback(() => {
-    setPattern("\\b\\w+@\\w+\\.\\w+\\b");
-    setTestText(`john@example.com
+const handleSample = useCallback(() => {
+  setPattern("\\b\\w+@\\w+\\.\\w+\\b");
+  setTestText(`john@example.com
 hello world
 jane@test.com
 support@company.org`);
 
-    setFlags({
-      g: true,
-      i: true,
-      m: false,
-    });
-  }, []);
-
+  setFlags({
+    g: true,
+    i: true,
+    m: false,
+  });
+}, []);
   const handleCopyPattern = useCallback(() => {
     if (!pattern) {
       toast.error("No pattern to copy.");
@@ -224,17 +222,6 @@ support@company.org`);
                   Pattern
                 </label>
 
-                <button
-                  type="button"
-                  onClick={handleSample}
-                  className={`text-xs font-medium transition-colors duration-300 ${
-                    dark
-                      ? "text-blue-500 hover:text-blue-400"
-                      : "text-blue-600 hover:text-blue-700"
-                  }`}
-                >
-                  Sample
-                </button>
               </div>
               <input
                 type="text"
@@ -329,6 +316,17 @@ support@company.org`);
                   }`}
                 >
                   Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSample}
+                  className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                   dark
+                    ? "bg-white text-black border-white hover:bg-zinc-200"
+                    : "bg-black text-white border-black hover:bg-zinc-800"
+                 }`}
+                >
+                 Sample
                 </button>
                 <button
                   type="button"

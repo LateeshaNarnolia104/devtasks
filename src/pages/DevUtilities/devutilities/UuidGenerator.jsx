@@ -146,7 +146,11 @@ const UuidGenerator = () => {
                   <button
                     type="button"
                     onClick={handleSample}
-                    className="text-xs font-medium text-blue-500 hover:underline"
+                    className={`px-4 py-2 rounded-xl border font-black text-xs uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                        dark
+                          ? "bg-white text-black border-white hover:bg-zinc-200"
+                          : "bg-black text-white border-black hover:bg-zinc-800"
+                     }`}
                   >
                     Sample
                   </button>

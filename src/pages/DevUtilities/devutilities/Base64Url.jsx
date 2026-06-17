@@ -68,17 +68,15 @@ const Base64Url = () => {
     setInput("");
     setOutput("");
   };
+const handleSample = () => {
+  if (mode === "base64") {
+    setInput("SGVsbG8gRGV2VGFza3Mh");
+  } else {
+    setInput("Hello%20DevTasks%21");
+  }
 
-  const handleSample = () => {
-    if (mode === "base64") {
-      setInput("Hello World from Dev Utilities");
-    } else {
-      setInput("https://example.com/search?q=react js&category=frontend");
-    }
-
-    setOutput("");
-  };
-
+  setOutput("");
+};
   const handleCopy = async () => {
     if (!output) return;
     try {
@@ -92,6 +90,7 @@ const Base64Url = () => {
   const actionButtons = [
     { label: "Encode", onClick: handleEncode },
     { label: "Decode", onClick: handleDecode },
+    { label: "Sample", onClick: handleSample },
     { label: "Clear", onClick: handleClear },
     { label: "Copy", onClick: handleCopy },
   ];
@@ -182,11 +181,11 @@ const Base64Url = () => {
                 <button
                   type="button"
                   onClick={handleSample}
-                  className={`text-xs font-medium transition-colors duration-300 ${
-                    dark
-                      ? "text-blue-500 hover:text-blue-400"
-                      : "text-blue-600 hover:text-blue-700"
-                  }`}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+  dark
+    ? "bg-white text-black hover:bg-zinc-200"
+    : "bg-black text-white hover:bg-zinc-800"
+}`}
                 >
                   Sample
                 </button>
