@@ -13,7 +13,7 @@ import AddSnippet from "./pages/SnippetVault/snippetvault/AddSnippet";
 import ListSnippets from "./pages/SnippetVault/snippetvault/ListSnippets";
 import DeleteHistorySnippet from "./pages/SnippetVault/snippetvault/DeleteHistory";
 import DataCenterSnippet from "./pages/SnippetVault/snippetvault/DataCenter";
-
+import TextCaseConverter from "./pages/DevUtilities/devutilities/TextCaseConverter";
 // Resource Hub Imports
 import ResourceHub from "./pages/ResourceHub/ResourceHub";
 import AddResource from "./pages/ResourceHub/resourcehub/AddResource";
@@ -36,6 +36,7 @@ import CodeSandbox from "./pages/DevUtilities/devutilities/CodeSandbox";
 import HashGenerator from "./pages/DevUtilities/devutilities/HashGenerator";
 import ColorConverter from "./pages/DevUtilities/devutilities/ColorConverter";
 import QrCodeGenerator from "./pages/DevUtilities/devutilities/QrCodeGenerator";
+import UrlParserBuilder from "./pages/DevUtilities/devutilities/UrlParserBuilder";
 
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { CategoryProvider } from "./context/CategoryContext";
@@ -45,7 +46,6 @@ import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import "./index.css";
-import TextCaseConverter from "./pages/DevUtilities/devutilities/TextCaseConverter";
 import MockJsonGenerator from "./pages/DevUtilities/devutilities/MockJsonDataGenerator";
 import MarkdownTableGenerator from "./pages/DevUtilities/devutilities/MarkdownTableGenerator";
 
@@ -141,9 +141,11 @@ function AppInner({ toggleHUD, hudVisible }) {
             <Route path="/devutilities/color" element={<ColorConverter />} />
             <Route path="/devutilities/code" element={<CodeSandbox />} />
             <Route path="/devutilities/qrcode" element={<QrCodeGenerator />} />
-            <Route path="/devutilities/text-case-converter" element={<TextCaseConverter />} />
-            <Route path="/devutilities/mock-json-generator" element={<MockJsonGenerator />} />
-            <Route path="/devutilities/markdown-table-generator" element={<MarkdownTableGenerator />} />
+          <Route path="/devutilities/text-case" element={<TextCaseConverter />} />
+<Route path="/devutilities/mock-json" element={<MockJsonGenerator />} />
+<Route path="/devutilities/markdown-table" element={<MarkdownTableGenerator />} />
+<Route path="/devutilities/url-parser" element={<UrlParserBuilder />} />
+
           </Routes>
         </div>
       </div>
