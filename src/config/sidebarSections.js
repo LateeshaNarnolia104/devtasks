@@ -196,6 +196,11 @@ const SIDEBAR_SECTIONS = [
         description: "Convert text into different cases",
         path: "/devutilities/text-case-converter",
       },
+      {
+        label: "Mock JSON Generaor",
+        description: "Mock JSON data generator",
+        path: "/devutilities/mock-json-generator",
+      },
       { label: "Utilities Home", description: "Tool overview", path: "/devutilities", exact: true },
       { label: "Regex Tester", description: "Test expressions", path: "/devutilities/regex" },
       { label: "JSON Formatter", description: "Format and validate JSON", path: "/devutilities/json" },
