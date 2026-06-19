@@ -63,11 +63,22 @@ const DevUtilities = () => {
     },
     {
       title: "JSON YAML Converter",
-      description: "Convert JSON to YAML and YAML to JSON in real time with syntax validation.",
+      description:
+        "Convert JSON to YAML and YAML to JSON in real time with syntax validation.",
       path: "/devutilities/json-yaml",
       icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h10M7 12h6m-6 5h10M4 4v16m16-16v16" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M7 7h10M7 12h6m-6 5h10M4 4v16m16-16v16"
+          />
         </svg>
       ),
     },
@@ -283,21 +294,64 @@ const DevUtilities = () => {
     },
     {
       title: "Text Case Converter",
-      description: "Convert text to uppercase, lowercase, title case, sentence case, and more. Fully offline.",
+      description:
+        "Convert text to uppercase, lowercase, title case, sentence case, and more. Fully offline.",
       path: "/devutilities/text-case-converter",
       icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm13 0h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3-6h1v1h-1v-1z" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm13 0h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3-6h1v1h-1v-1z"
+          />
         </svg>
       ),
     },
     {
       title: "Mock JSON Generator",
-      description: "Generate mock JSON data for testing and prototyping. Fully offline.",
+      description:
+        "Generate mock JSON data for testing and prototyping. Fully offline.",
       path: "/devutilities/mock-json-generator",
       icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm13 0h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3-6h1v1h-1v-1z" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm13 0h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3 3h1v1h-1v-1zm-3 0h1v1h-1v-1zm3-6h1v1h-1v-1z"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Markdown Table Generator",
+      description:
+        "Build markdown tables visually or convert CSV and TSV data instantly.",
+      path: "/devutilities/markdown-table-generator",
+      icon: (
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 6h16M4 12h16M4 18h16M8 4v16M16 4v16"
+          />
         </svg>
       ),
     },
