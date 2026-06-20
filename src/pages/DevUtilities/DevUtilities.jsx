@@ -544,6 +544,27 @@ const DevUtilities = () => {
         </svg>
       ),
     },
+    {
+      title: "HTML Entity Converter",
+      description:
+        "Encode and decode HTML/XML entities using named or numeric formats. Fully offline.",
+      path: "/devutilities/html-entity",
+      icon: (
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 9l-3 3 3 3m8-6l3 3-3 3M13 5l-2 14"
+          />
+        </svg>
+      ),
+    },
   ];
 
   return (

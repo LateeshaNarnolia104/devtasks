@@ -21,6 +21,8 @@ import DataCenterSnippet from "./pages/SnippetVault/snippetvault/DataCenter";
 import HtmlEntityConverter from "./pages/DevUtilities/devutilities/HtmlEntityConverter";
 
 import TextCaseConverter from "./pages/DevUtilities/devutilities/TextCaseConverter";
+import HtmlEntityConverter from "./pages/DevUtilities/devutilities/HtmlEntityConverter";
+
 // Resource Hub Imports
 import ResourceHub from "./pages/ResourceHub/ResourceHub";
 import AddResource from "./pages/ResourceHub/resourcehub/AddResource";
