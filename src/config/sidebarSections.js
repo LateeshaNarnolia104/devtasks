@@ -186,7 +186,7 @@ const SIDEBAR_SECTIONS = [
         description: "Inspect tokens",
         path: "/devutilities/jwt",
       },
-     
+
       {
         label: "Diff Checker",
         description: "Compare text differences",
@@ -249,8 +249,15 @@ const SIDEBAR_SECTIONS = [
       },
       {
         label: "User Agent Parser",
-        description: "Parse browser user-agent strings and inspect client environment",
+        description:
+          "Parse browser user-agent strings and inspect client environment",
         path: "/devutilities/user-agent",
+      },
+      {
+        label: "Chmod Calculator",
+        description:
+          "Calculate Unix file permissions in decimal and octal notation.",
+        path: "/devutilities/chmod",
       },
     ],
   },

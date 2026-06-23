@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { FaCode } from "react-icons/fa";
+import { BiTerminal } from "react-icons/bi";
 
 const DevUtilities = () => {
   const { dark } = useTheme();
@@ -406,6 +407,13 @@ const DevUtilities = () => {
         "Parse browser user-agent strings and inspect client environment information.",
       path: "/devutilities/user-agent",
       icon: <FaCode />,
+    },
+    {
+      title: "Chmod Calculator",
+      description:
+        "Calculate Unix file permissions in decimal and octal notation.",
+      path: "/devutilities/chmod",
+      icon: <BiTerminal />,
     },
   ];
 

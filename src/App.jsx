@@ -63,6 +63,7 @@ import MockJsonGenerator from "./pages/DevUtilities/devutilities/MockJsonDataGen
 import MarkdownTableGenerator from "./pages/DevUtilities/devutilities/MarkdownTableGenerator";
 import JsonSchemaValidator from "./pages/DevUtilities/devutilities/JsonSchemaValidator";
 import FlexboxGridGenerator from "./pages/DevUtilities/devutilities/FlexboxGridGenerator";
+import ChmodCalculator from "./pages/DevUtilities/devutilities/ChmodCalculator";
 
 function App() {
   const [hudVisible, setHudVisible] = useState(false);
@@ -277,6 +278,7 @@ function AppInner({ toggleHUD, hudVisible }) {
               path="/devutilities/json-schema-validator"
               element={<JsonSchemaValidator />}
             />
+            <Route path="/devutilities/chmod" element={<ChmodCalculator />} />
           </Routes>
         </div>
       </div>
