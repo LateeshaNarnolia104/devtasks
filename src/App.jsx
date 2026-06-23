@@ -21,7 +21,7 @@ import DataCenterSnippet from "./pages/SnippetVault/snippetvault/DataCenter";
 import HtmlEntityConverter from "./pages/DevUtilities/devutilities/HtmlEntityConverter";
 
 import TextCaseConverter from "./pages/DevUtilities/devutilities/TextCaseConverter";
-//extra added 
+//extra added
 import UserAgentParser from "./pages/DevUtilities/devutilities/UserAgentParser";
 
 // Resource Hub Imports
@@ -49,6 +49,7 @@ import QrCodeGenerator from "./pages/DevUtilities/devutilities/QrCodeGenerator";
 import UrlParserBuilder from "./pages/DevUtilities/devutilities/UrlParserBuilder";
 import SqlFormatter from "./pages/DevUtilities/devutilities/SqlFormatter";
 import JwtEncoder from "./pages/DevUtilities/devutilities/JwtEncoder";
+import CssGradientGenerator from "./pages/DevUtilities/devutilities/CssGradientGenerator";
 
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { CategoryProvider } from "./context/CategoryContext";
@@ -98,7 +99,14 @@ function AppInner({ toggleHUD, hudVisible }) {
   // Temporary global scroll debugger
   useEffect(() => {
     const handleGlobalScroll = (e) => {
-      console.log("[Scroll Debug] scroll target:", e.target, "scrollTop:", e.target.scrollTop, "window.scrollY:", window.scrollY);
+      console.log(
+        "[Scroll Debug] scroll target:",
+        e.target,
+        "scrollTop:",
+        e.target.scrollTop,
+        "window.scrollY:",
+        window.scrollY,
+      );
     };
     window.addEventListener("scroll", handleGlobalScroll, true);
     return () => window.removeEventListener("scroll", handleGlobalScroll, true);
@@ -115,13 +123,31 @@ function AppInner({ toggleHUD, hudVisible }) {
     const timers = [];
     if (savedPosition) {
       const targetScroll = parseInt(savedPosition, 10);
-      console.log(`[Scroll Restoration] Restoring ${location.pathname} to ${targetScroll}`);
+      console.log(
+        `[Scroll Restoration] Restoring ${location.pathname} to ${targetScroll}`,
+      );
       scrollContainer.scrollTop = targetScroll;
-      
-      timers.push(setTimeout(() => { scrollContainer.scrollTop = targetScroll; }, 50));
-      timers.push(setTimeout(() => { scrollContainer.scrollTop = targetScroll; }, 150));
-      timers.push(setTimeout(() => { scrollContainer.scrollTop = targetScroll; }, 300));
-      timers.push(setTimeout(() => { scrollContainer.scrollTop = targetScroll; }, 500));
+
+      timers.push(
+        setTimeout(() => {
+          scrollContainer.scrollTop = targetScroll;
+        }, 50),
+      );
+      timers.push(
+        setTimeout(() => {
+          scrollContainer.scrollTop = targetScroll;
+        }, 150),
+      );
+      timers.push(
+        setTimeout(() => {
+          scrollContainer.scrollTop = targetScroll;
+        }, 300),
+      );
+      timers.push(
+        setTimeout(() => {
+          scrollContainer.scrollTop = targetScroll;
+        }, 500),
+      );
     } else {
       console.log(`[Scroll Restoration] Resetting ${location.pathname} to 0`);
       scrollContainer.scrollTop = 0;
@@ -131,7 +157,9 @@ function AppInner({ toggleHUD, hudVisible }) {
     const safetyTimeout = setTimeout(() => {
       if (isRestoringRef.current) {
         isRestoringRef.current = false;
-        console.log(`[Scroll Restoration] Safety timer enabled scroll saving for ${location.pathname}`);
+        console.log(
+          `[Scroll Restoration] Safety timer enabled scroll saving for ${location.pathname}`,
+        );
       }
     }, 800);
 
@@ -139,14 +167,24 @@ function AppInner({ toggleHUD, hudVisible }) {
     const handleUserInteraction = () => {
       if (isRestoringRef.current) {
         isRestoringRef.current = false;
-        console.log(`[Scroll Restoration] User interaction detected. Scroll saving enabled for ${location.pathname}`);
+        console.log(
+          `[Scroll Restoration] User interaction detected. Scroll saving enabled for ${location.pathname}`,
+        );
       }
     };
 
-    scrollContainer.addEventListener("wheel", handleUserInteraction, { passive: true });
-    scrollContainer.addEventListener("touchmove", handleUserInteraction, { passive: true });
-    scrollContainer.addEventListener("keydown", handleUserInteraction, { passive: true });
-    scrollContainer.addEventListener("mousedown", handleUserInteraction, { passive: true });
+    scrollContainer.addEventListener("wheel", handleUserInteraction, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("touchmove", handleUserInteraction, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("keydown", handleUserInteraction, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("mousedown", handleUserInteraction, {
+      passive: true,
+    });
 
     let saveTimeout;
     const handleScroll = () => {
@@ -161,7 +199,9 @@ function AppInner({ toggleHUD, hudVisible }) {
 
       if (saveTimeout) clearTimeout(saveTimeout);
       saveTimeout = setTimeout(() => {
-        console.log(`[Scroll Restoration] Saving ${location.pathname} position: ${currentScrollTop}`);
+        console.log(
+          `[Scroll Restoration] Saving ${location.pathname} position: ${currentScrollTop}`,
+        );
         sessionStorage.setItem(`scroll_${location.pathname}`, currentScrollTop);
       }, 50);
     };
@@ -181,9 +221,11 @@ function AppInner({ toggleHUD, hudVisible }) {
 
   return (
     <div
-      className={`w-full ${showNavbar ? "h-screen overflow-hidden flex flex-col" : "min-h-screen"
-        } transition-colors duration-300 ${dark ? "bg-zinc-950 text-white" : "bg-[#FDFDFD] text-black"
-        }`}
+      className={`w-full ${
+        showNavbar ? "h-screen overflow-hidden flex flex-col" : "min-h-screen"
+      } transition-colors duration-300 ${
+        dark ? "bg-zinc-950 text-white" : "bg-[#FDFDFD] text-black"
+      }`}
     >
       <SplashScreen />
 
@@ -205,7 +247,10 @@ function AppInner({ toggleHUD, hudVisible }) {
           }
         >
           <Routes>
-            <Route path="/devutilities/user-agent" element={<UserAgentParser />}/>
+            <Route
+              path="/devutilities/user-agent"
+              element={<UserAgentParser />}
+            />
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
 
@@ -255,11 +300,23 @@ function AppInner({ toggleHUD, hudVisible }) {
             <Route path="/devutilities" element={<DevUtilities />} />
             <Route path="/devutilities/regex" element={<RegexTester />} />
             <Route path="/devutilities/json" element={<JsonFormatter />} />
-            <Route path="/devutilities/json-yaml" element={<JsonYamlConverter />} />
-            <Route path="/devutilities/markdown" element={<MarkdownPreviewer />} />
-            <Route path="/devutilities/html-entity" element={<HtmlEntityConverter />} />
+            <Route
+              path="/devutilities/json-yaml"
+              element={<JsonYamlConverter />}
+            />
+            <Route
+              path="/devutilities/markdown"
+              element={<MarkdownPreviewer />}
+            />
+            <Route
+              path="/devutilities/html-entity"
+              element={<HtmlEntityConverter />}
+            />
             <Route path="/devutilities/base64" element={<Base64Url />} />
-            <Route path="/devutilities/timestamp" element={<TimestampConverter />} />
+            <Route
+              path="/devutilities/timestamp"
+              element={<TimestampConverter />}
+            />
             <Route path="/devutilities/uuid" element={<UuidGenerator />} />
             <Route path="/devutilities/jwt" element={<JwtDecoder />} />
             <Route path="/devutilities/jwt-encode" element={<JwtEncoder />} />
@@ -268,17 +325,36 @@ function AppInner({ toggleHUD, hudVisible }) {
             <Route path="/devutilities/color" element={<ColorConverter />} />
             <Route path="/devutilities/code" element={<CodeSandbox />} />
             <Route path="/devutilities/qrcode" element={<QrCodeGenerator />} />
-            <Route path="/devutilities/text-case" element={<TextCaseConverter />} />
-            <Route path="/devutilities/mock-json-generator" element={<MockJsonGenerator />} />
-            <Route path="/devutilities/flexbox-grid-generator" element={<FlexboxGridGenerator />} />
-            <Route path="/devutilities/markdown-table-genertaor" element={<MarkdownTableGenerator />} />
-            <Route path="/devutilities/url-parser" element={<UrlParserBuilder />} />
+            <Route
+              path="/devutilities/text-case"
+              element={<TextCaseConverter />}
+            />
+            <Route
+              path="/devutilities/mock-json-generator"
+              element={<MockJsonGenerator />}
+            />
+            <Route
+              path="/devutilities/flexbox-grid-generator"
+              element={<FlexboxGridGenerator />}
+            />
+            <Route
+              path="/devutilities/markdown-table-genertaor"
+              element={<MarkdownTableGenerator />}
+            />
+            <Route
+              path="/devutilities/url-parser"
+              element={<UrlParserBuilder />}
+            />
             <Route path="/devutilities/sql" element={<SqlFormatter />} />
             <Route
               path="/devutilities/json-schema-validator"
               element={<JsonSchemaValidator />}
             />
             <Route path="/devutilities/cron" element={<CronExpression />} />
+            <Route
+              path="/devutilities/css-gradient"
+              element={<CssGradientGenerator />}
+            />
           </Routes>
         </div>
       </div>
