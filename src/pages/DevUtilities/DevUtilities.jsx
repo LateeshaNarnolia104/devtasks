@@ -445,6 +445,20 @@ const DevUtilities = () => {
     </svg>
   ),
 },
+
+{
+  title: "Number Base Converter & Bitwise Visualizer",
+  description:
+    "Convert numbers between decimal, hexadecimal, binary, and octal, and visualize bitwise AND/OR/XOR/NOT/shift operations bit by bit.",
+  path: "/devutilities/number-base-converter",
+  icon: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 6v12a1 1 0 001 1h14a1 1 0 001-1V6M8 10h.01M8 14h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01" />
+    </svg>
+  ),
+},
+
+
   ];
 
   // There are some duplicate cards, so I'm just leaving this here.
